@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="site.webmanifest" crossorigin="use-credentials">
+<link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="stylesheet" href="common.css" />
+<title>Remotes</title>
+<script defer src="common.js"></script>
+<script defer src="fa/selection.min.js"></script>
+<style>
+body {
+	text-align: center;
+	letter-spacing: 1px;
+  font: bold 54px sans-serif;
+}
+device {
+	height: 100%;
+	border: none;
+	align-content: space-evenly;
+}
+a, button {
+	border: 2px solid rgb(74 74 74);
+	padding: 0.2em;
+	border-radius: 0.5em;
+	min-width: 6.2em;
+}
+a:not(:focus-visible) {
+	text-decoration: none;
+}
+i::before {
+	content: "\00A0";
+}
+a img {
+	margin: 0.1em auto -0.1em;
+}
+#led {
+	color: white;
+}
+device button[data-keycode=KEY_POWER] {
+	line-height: 2.32em;
+}
+</style>
+</head>
+<body>
+	<device data-keymap="macros">
+		<!--<a href="yaber_y31.html"><img src="assets/yaber-logo.svg" alt=Yaber width=253 height=46><br>Projector</a>
+		<a href="bose_tv_speaker.html"><i class="fas fa-bose fa-xs"></i><br>TV Speaker</a>
+		<button data-keycode="KEY_POWER"><i id="led" class="fas fa-power-off fa-lg"></i></button>
+		<a href="christmas_lights.html"><i class="fas fa-tree-christmas fa-xs"></i><div>Tree Lights</div></a>-->
+		<a href="heater.html"><div>Heater</div></a>
+	</device>
+</body>
+</html>

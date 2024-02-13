@@ -1,0 +1,48 @@
+:root {
+	height: 100%;
+	background-color: black;
+	color: white;
+}
+body {
+  height: 100%;
+	margin: 0;
+	display: grid;
+	place-items: center;
+	line-height: 1;
+}
+a {
+	color: inherit;
+}
+#led {
+	color: darkred;
+}
+device {
+	display: grid;
+	border: 2px solid rgb(74 74 74);
+	border-radius: 1.1em;
+}
+device div {
+	display: grid;
+}
+device div, device button {
+	border: 2px solid rgb(74 74 74);
+}
+device div > div {
+	margin: -0.2em;
+}
+device span {
+	display: grid;
+	justify-content: center;
+	align-items: center;
+}
+device button {
+	font-size: unset;
+	line-height: unset;
+	font-weight: bold;
+	background-color: unset;
+	color: unset;
+	touch-action: none;
+}
+device button:focus:not(:focus-visible) {
+	outline: none;
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Remotes",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "heater.html",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="site.webmanifest" crossorigin="use-credentials">
+<link rel="icon" href="assets/icon-192.png" type="image/png" sizes="192x192">
+<link rel="stylesheet" href="common.css" />
+<title>Heater Remote</title>
+<script defer src="common.js"></script>
+<script defer src="fa/selection.min.js"></script>
+<style>
+device {
+	font-size: calc((100svh - 22px) / 16);
+	height: calc(0.6em * 2 + 2.1em * 7 + 2px * 3 * 2 + 10px);
+	width: calc(2.1em * 3 + 4px + 10px);
+	grid: 0.6em repeat(7, 1fr) 0.6em / repeat(3, 1fr);
+	background-color: lightgray;
+	color: black;
+	padding: 0 0.2em;
+}
+device div {
+	border-radius: 0.3em;
+	padding: 5px;
+}
+device span {
+	font-family: Arial, Helvetica, sans-serif;
+}
+device span.led {
+	grid-column: 1 / -1;
+	justify-items: center;
+}
+device button {
+	border-radius: 16em;
+	border-width: 3px;
+	margin: 2px;
+	padding: 0px;
+}
+device div.rows-6 {
+	grid-template-rows: repeat(6, 1fr);
+	grid-row: span 6;
+}
+device div.columns-3 {
+	grid-template-columns: repeat(3, 1fr);
+	grid-column-end: span 3;
+}
+device button[data-keycode=Power] {
+	background: red;
+}
+device button[data-keycode=Mode] {
+	font-size: 125%;
+}
+device span.text {
+	align-content: start;
+	margin-block-start: 1ex;
+	font-size: calc((100svh - 12px) / 16 / 2);
+}
+</style>
+</head>
+<body>
+<device data-keymap="heater">
+	<span class="led">
+		<i id="led" class="fas fa-circle" data-fa-transform="shrink-9 up-3"></i>
+	</span>
+
+	<div class="rows-6 columns-3">
+		<button data-keycode="Power" data-raw="+1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +1266 -8018 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +1266"><i class="fas fa-power-off"></i></button>
+		<span></span>
+		<span></span>
+
+		<span class="text">ON/OFF</span>
+		<span></span>
+		<span></span>
+
+		<button data-keycode="Mode" data-raw="+1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +1266 -422 +422 -1266 +422 -8018 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +1266 -422 +422 -1266 +422">♨</button>
+		<button data-keycode="Up" data-raw="+1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -8018 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422"><i class="fas fa-plus"></i></button>
+		<span></span>
+
+		<span class="text">MODE</span>
+		<span class="text">UP</span>
+		<span></span>
+
+		<button data-keycode="Timer" data-raw="+1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +1266 -422 +422 -8018 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +1266 -422 +422"><i class="fas fa-alarm-clock"></i></button>
+		<button data-keycode="Down" data-raw="+1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422 -8018 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +422 -1266 +422"><i class="fas fa-minus"></i></button>
+		<button data-keycode="Oscil" data-raw="+1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +1266 -422 +422 -1266 +422 -1266 +422 -8018 +1266 -422 +1266 -422 +422 -1266 +1266 -422 +1266 -422 +422 -1266 +422 -1266 +422 -1266 +1266 -422 +422 -1266 +422 -1266 +422"><i class="fas fa-arrows-alt-h"></i></button>
+
+		<span class="text">TIMER</span>
+		<span class="text">DOWN</span>
+		<span class="text">OSCIL</span>
+	</div>
+
+</device>
+</body>
+</html>

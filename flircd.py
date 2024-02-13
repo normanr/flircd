@@ -7,6 +7,11 @@ import urllib.parse
 
 
 FLIRC_UTIL: pexpect.replwrap.REPLWrapper
+FLIRC_UTIL_COMMANDS = (
+  'settings',
+  'sendir',
+  'version',
+)
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
@@ -17,19 +22,31 @@ class Handler(http.server.BaseHTTPRequestHandler):
     flags = urllib.parse.parse_qsl(parts.query)
     cmd = urllib.parse.unquote(parts.path.lstrip('/'))
 
-    def flirc_shell_escape(s):
-      return s.replace(' ', '\\ ').replace('\t', '\\\t')
-    args = [
-      cmd
-    ] + [
-      f'--{k}={flirc_shell_escape(v)}' for k, v in flags
-    ]
+    if cmd in FLIRC_UTIL_COMMANDS:
+      def flirc_shell_escape(s):
+        return s.replace(' ', '\\ ').replace('\t', '\\\t')
+      args = [
+        cmd
+      ] + [
+        f'--{k}={flirc_shell_escape(v)}' for k, v in flags
+      ]
 
-    result = FLIRC_UTIL.run_command(' '.join(args))
-    self.send_response(200, 'OK')
-    self.send_header('Content-Length', str(len(result)))
-    self.end_headers()
-    self.wfile.write(result.encode('utf8'))
+      result = FLIRC_UTIL.run_command(' '.join(args))
+      self.send_response(200, 'OK')
+      self.send_header('Content-Length', str(len(result)))
+      self.end_headers()
+      self.wfile.write(result.encode('utf8'))
+      return
+    elif cmd == 'restart':
+      FLIRC_UTIL.child.sendline('exit')
+      FLIRC_UTIL.child.close()
+      FLIRC_UTIL = pexpect.replwrap.REPLWrapper('flirc_util shell', 'flirc_util $', None)
+      self.send_response(204, 'No Content')
+      self.send_header('Content-Length', '0')
+      self.end_headers()
+      return
+
+    self.send_error(404)
 
 
 if __name__ == '__main__':

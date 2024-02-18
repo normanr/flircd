@@ -4,10 +4,11 @@ import http
 import http.server
 import threading
 import pexpect.replwrap
+import toml
 import urllib.parse
 
 
-__version__ = '0.1'
+__version__ = '0.2'
 
 
 FLIRC_UTIL: pexpect.replwrap.REPLWrapper
@@ -17,6 +18,17 @@ FLIRC_UTIL_COMMANDS = (
   'sendir',
   'version',
 )
+RAW_TO_CSV = str.maketrans(' ', ',', '+-')
+
+
+def get_raw(keymap, keycode) -> str | None:
+  with open(f'/etc/rc_keymaps/{keymap}.toml') as f:
+    keymap = toml.load(f)
+  for protocol in keymap['protocols']:
+    if protocol['protocol'] != 'raw':
+      continue
+    codes = {raw['keycode']: raw['raw'] for raw in protocol['raw']}
+    return codes[keycode]
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -33,6 +45,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     parts = urllib.parse.urlsplit(self.path)
     flags = urllib.parse.parse_qsl(parts.query)
     cmd = urllib.parse.unquote(parts.path.lstrip('/'))
+
+    if cmd == 'cgi-bin/ir-ctl-send':
+      try:
+        flag_dict = dict(flags)
+        raw = get_raw(flag_dict['keymap'], flag_dict['keycode'])
+        if raw:
+          csv = raw.translate(RAW_TO_CSV)
+          cmd = 'sendir'
+          flags = (('csv', csv),)
+      except:
+        pass
 
     if cmd in FLIRC_UTIL_COMMANDS:
       def flirc_shell_escape(s):

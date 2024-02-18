@@ -18,12 +18,13 @@ let touchstart = async (event) => {
   event.preventDefault();
   console.log(event.type, button.dataset.keycode)
   let data = {
-    "raw": button.dataset.raw,
+    "keymap": button.closest('device').dataset.keymap,
+    "keycode": button.dataset.keycode,
   };
   let led = document.getElementById('led');
   led.style = "color:red";
   let query = Object.entries(data).map(([k, v]) => escape(k) + '=' + escape(v)).join('&');
-  const request = new Request("/sendir?" + query, {
+  const request = new Request("/cgi-bin/ir-ctl-send?" + query, {
     method: 'POST',
     headers: {
       'Accept': 'text/plain',
@@ -43,7 +44,7 @@ let touchstart = async (event) => {
     const f = document.createElement('form');
     f.style.display = 'none';
     f.method = 'POST';
-    f.action = "/sendir?" + query;
+    f.action = "/cgi-bin/ir-ctl-send?" + query;
     document.body.appendChild(f);
     f.submit();
     return;

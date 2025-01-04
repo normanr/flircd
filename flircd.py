@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 
-FLIRC_UTIL: pexpect.replwrap.REPLWrapper
+FLIRC_UTIL: pexpect.replwrap.REPLWrapper = None
 FLIRC_UTIL_LOCK = threading.Lock()
 FLIRC_UTIL_COMMANDS = (
   'settings',
@@ -29,6 +29,15 @@ FLIRC_UTIL_COMMANDS = (
   'version',
 )
 RAW_TO_CSV = str.maketrans(' ', ',', '+-')
+
+
+def init_flirc_util():
+  global FLIRC_UTIL
+  with FLIRC_UTIL_LOCK:
+    if FLIRC_UTIL:
+      FLIRC_UTIL.child.sendline('exit')
+      FLIRC_UTIL.child.close()
+    FLIRC_UTIL = pexpect.replwrap.REPLWrapper('flirc_util shell', 'flirc_util $ ', None)
 
 
 def get_raw(keymap, keycode) -> str | None:
@@ -42,8 +51,6 @@ def get_raw(keymap, keycode) -> str | None:
 
 
 def flirc(cmd: str, flags: collections.abc.Sequence[tuple[str, str]]):
-  global FLIRC_UTIL
-
   if cmd == 'ir-ctl-send':
     try:
       flag_dict = dict(flags)
@@ -65,12 +72,13 @@ def flirc(cmd: str, flags: collections.abc.Sequence[tuple[str, str]]):
     ]
 
     with FLIRC_UTIL_LOCK:
-      return FLIRC_UTIL.run_command(' '.join(args))
+      out = FLIRC_UTIL.run_command(' '.join(args))
+    if '[E] ' in out:
+      init_flirc_util()
+      out = FLIRC_UTIL.run_command(' '.join(args))
+    return out
   elif cmd == 'restart':
-    with FLIRC_UTIL_LOCK:
-      FLIRC_UTIL.child.sendline('exit')
-      FLIRC_UTIL.child.close()
-      FLIRC_UTIL = pexpect.replwrap.REPLWrapper('flirc_util shell', 'flirc_util $', None)
+    init_flirc_util()
     return None
 
   return False
@@ -168,8 +176,9 @@ def main(args=None):
   configure_logging(args.verbose - args.quiet)
   logger.info(args)
 
+  init_flirc_util()
   global FLIRC_UTIL
-  FLIRC_UTIL = pexpect.replwrap.REPLWrapper('flirc_util shell', 'flirc_util $', None)
+  FLIRC_UTIL = pexpect.replwrap.REPLWrapper('flirc_util shell', 'flirc_util $ ', None)
 
   if args.mqtt:
     mqtt_init(args.mqtt)

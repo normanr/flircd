@@ -35,8 +35,14 @@ def init_flirc_util():
   global FLIRC_UTIL
   with FLIRC_UTIL_LOCK:
     if FLIRC_UTIL:
-      FLIRC_UTIL.child.sendline('exit')
-      FLIRC_UTIL.child.close()
+      try:
+        FLIRC_UTIL.child.sendline('exit')
+      except:
+        pass
+      try:
+        FLIRC_UTIL.child.close()
+      except:
+        pass
     FLIRC_UTIL = pexpect.replwrap.REPLWrapper('flirc_util shell', 'flirc_util $ ', None)
 
 
@@ -71,7 +77,11 @@ def flirc(cmd: str, flags: collections.abc.Sequence[tuple[str, str]]):
       f'--{k}={flirc_shell_escape(v)}' for k, v in flags
     ]
 
-    with FLIRC_UTIL_LOCK:
+    try:
+      with FLIRC_UTIL_LOCK:
+        out = FLIRC_UTIL.run_command(' '.join(args))
+    except Exception as e:
+      init_flirc_util()
       out = FLIRC_UTIL.run_command(' '.join(args))
     if '[E] ' in out:
       init_flirc_util()
